@@ -8,19 +8,25 @@ terminus uses a recursive zip-in-zip structure. here's the core idea:
 
 1. **leaf level (level 0):** a single zip file containing one 43-byte file of null data. this is ~120 bytes after compression (zip headers + compressed payload).
 
-2. **recursive levels (1-50):** each level creates a new zip containing 16 identical copies of the previous level's zip. because all 16 copies are byte-for-byte identical, DEFLATE stores the compressed representation once and references it 16 times. the overhead per copy is minimal.
+2. **recursive levels (1-50):** each level creates a new zip containing 16 copies of the previous level's zip. each entry is compressed independently by DEFLATE. because the input data is identical (all zeros), each entry compresses to a similar small size. the overhead per entry is roughly fixed, so the zip grows linearly.
 
 3. **extraction:** when you unzip the outermost file, you get 16 copies of the level-49 zip. unzip each of those, you get 16 copies each, so 256 level-48 zips. keep going until you hit level 0, which contains the actual 43-byte files. total files at level 0: 16^50.
 
-## why DEFLATE makes this work
+## why this works
 
-DEFLATE (the compression algorithm in ZIP) uses LZ77 + Huffman coding. LZ77 finds repeated byte sequences and replaces them with back-references. when you have 16 identical copies of the same data:
+DEFLATE (the compression algorithm in ZIP) uses LZ77 + Huffman coding. important: each ZIP entry is compressed independently -- DEFLATE does NOT share dictionaries between entries.
 
-- the first copy is stored normally
-- copies 2-16 are replaced with back-references to copy 1
-- the compressed size is roughly: (size of one copy) + small overhead per additional copy
+what makes it efficient is that the input data (all zeros) is extremely compressible. a 30 KB zip file full of zeros compresses to a few KB because DEFLATE can represent long runs of zeros very compactly.
 
-this is why the zip file grows linearly (~8KB per level) while the uncompressed content grows exponentially (16x per level).
+when you have 16 entries of the same zip:
+- entry 1 compresses to ~30 KB
+- entry 2 compresses to ~30 KB (same input, same output)
+- ...
+- entry 16 compresses to ~30 KB
+
+the zip doesn't deduplicate entries, but each entry is small because the content is highly compressible. the overhead per entry is roughly fixed (zip headers, filename, etc.), so the total grows linearly with the number of entries per level.
+
+this is why the zip file grows by ~8KB per level instead of 16x per level.
 
 ## empirical measurements
 
@@ -35,7 +41,7 @@ i built terminus and measured each level. here's what i found:
 | 20 | 136.51 KB | 43 YB | 3.7x10^20 |
 | 30 | 231.44 KB | 4.6x10^13 YB | 2.4x10^32 |
 | 40 | 336.19 KB | 5.1x10^22 YB | 1.8x10^44 |
-| 50 | 493.60 KB | 5.7x10^37 YB | 1.4x10^56 |
+| 50 | 508.95 KB | 5.7x10^37 YB | 1.4x10^56 |
 
 the zip size growth is roughly 8-10 KB per level, which matches the theoretical model. the compression ratio explodes because the output grows exponentially while the zip stays nearly flat.
 
@@ -51,7 +57,7 @@ where:
 - 120 = level 0 zip size (headers + compressed 43-byte payload)
 - 8192 = average bytes added per level (empirically measured)
 
-this is an approximation. actual measurements show some variation (the real level-50 zip was 493.60 KB, the model predicts ~400 KB). the difference is because the model doesn't account for:
+this is an approximation. actual measurements show some variation (the real level-50 zip was 508.95 KB, the model predicts ~400 KB). the difference is because the model doesn't account for:
 - zip central directory overhead growing with level
 - slight variations in DEFLATE compression ratio
 - filename length in zip entries
@@ -83,6 +89,6 @@ for practical purposes, the model is accurate enough. the exact zip size doesn't
 
 terminus is the same algorithm scaled up:
 - 42.zip: level 5, ~42KB -> ~4.5PB
-- terminus: level 50, ~493KB -> ~6.9x10^61 bytes
+- terminus: level 50, ~497KB -> ~6.9x10^61 bytes
 
-the key difference is depth. going from level 5 to level 50 multiplies the output by 16^45 ≈ 10^54. the zip size only grows from 42KB to 493KB. that's the power of the recursive approach.
+the key difference is depth. going from level 5 to level 50 multiplies the output by 16^45 ≈ 10^54. the zip size only grows from 42KB to 497KB. that's the power of the recursive approach.

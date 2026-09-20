@@ -46,7 +46,7 @@ def simulate(branching, level, payload):
     multiply the size by 16 -- they just add a flat overhead.
     """
     L0_SIZE = 120      # level 0 zip size in bytes
-    LEVEL_GROWTH = 8192  # bytes added per level (~8KB)
+    LEVEL_GROWTH = 10200  # bytes added per level (empirically measured average)
 
     total_files = branching ** level
     total_bytes = total_files * payload

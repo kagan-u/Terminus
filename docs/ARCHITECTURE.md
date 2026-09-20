@@ -9,7 +9,7 @@ how terminus works under the hood.
 terminus is built on the same principle as the classic 42.zip: zip-in-zip recursion.
 
 ```
-                    Terminus.zip (493 KB)
+                    Terminus.zip (497 KB)
                     |
         +-----------+-----------+
         |           |           |
@@ -59,23 +59,31 @@ total files at level 0: 16 x 16 x 16 x ... x 16 (50 times) = 16^50
 
 ---
 
-## why DEFLATE makes this possible
+## why this works
 
 the ZIP format uses DEFLATE compression (LZ77 + Huffman coding).
 
-LZ77 works by finding repeated byte sequences and replacing them with back-references. when you have 16 identical copies of the same data:
+important: each ZIP entry is compressed independently. DEFLATE does NOT share dictionaries or references between different entries. so "16 copies stored once" is not technically accurate.
+
+what actually happens:
 
 ```
-COPY 1: stored normally (~30 KB compressed)
-COPY 2: back-reference to copy 1 (a few bytes)
-COPY 3: back-reference to copy 1 (a few bytes)
-...
-COPY 16: back-reference to copy 1 (a few bytes)
+ENTRY 1: bomb_0000.zip (~30 KB compressed)
+  - DEFLATE compresses this entry on its own
+  - the inner zip contains highly compressible data (zeros)
+  - result: small compressed size
+
+ENTRY 2: bomb_0001.zip (~30 KB compressed)
+  - DEFLATE compresses this entry independently
+  - same input = same compressed output
+  - result: same small compressed size
+
+... (16 entries total, all identical)
 ```
 
-result: 16 copies take up roughly the space of 1 copy + small overhead.
+each entry is compressed separately, but because the input data is identical (all zeros), each entry compresses to roughly the same small size. the zip doesn't deduplicate across entries -- it just benefits from the fact that each entry is highly compressible on its own.
 
-this is why the zip file grows by ~8KB per level instead of 16x per level.
+this is why the zip grows by ~8KB per level instead of 16x per level. each new entry adds a fixed overhead, not 16x the previous size.
 
 ---
 
@@ -99,7 +107,7 @@ Level  Measured   Model     Error
  20    136.51 KB  160.12 KB -15%
  30    231.44 KB  240.12 KB -4%
  40    336.19 KB  320.12 KB +5%
- 50    493.60 KB  400.12 KB +23%
+ 50    508.95 KB  400.12 KB +27%
 ```
 
 the model is approximate. the real zip has additional overhead from:

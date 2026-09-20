@@ -11,13 +11,13 @@
 
 **RECURSIVE ZIP BOMB**
 
-493 KB compressed -> 6.91 x 10^61 bytes output
+497 KB compressed -> 6.91 x 10^61 bytes output
 
 ---
 
 ## what is this
 
-a recursive zip bomb. fits on a floppy disk compressed, fills the observable universe uncompressed.
+a recursive zip bomb. ~497 KB compressed, produces a theoretical output of 6.91 x 10^61 bytes.
 
 built on the 42.zip algorithm. level 50, branching factor 16, 43-byte payload.
 
@@ -30,7 +30,8 @@ built on the 42.zip algorithm. level 50, branching factor 16, 43-byte payload.
 |                                                                       |
 |   Terminus.zip creates 1.6 x 10^61 files                             |
 |   Requires 6.91 x 10^61 bytes of disk space                          |
-|   Your system WILL crash. Your data WILL be lost.                     |
+|   Attempting extraction can exhaust available storage and resources   |
+|   and may make the system unusable.                                   |
 |                                                                       |
 |   This is a research artifact. Don't be stupid with it.               |
 |                                                                       |
@@ -44,15 +45,16 @@ built on the 42.zip algorithm. level 50, branching factor 16, 43-byte payload.
 ```
 +------------------+----------------------------------------------------+
 | FILE             | Terminus.zip                                       |
-| SIZE             | 493.60 KB (505,446 bytes)                         |
-| SHA256           | 3ba1761a...cd96dd96                                |
+| SIZE             | 497 KB (508,950 bytes)                             |
+| SHA256           | 5269c1b60f9497eb8a6bf9734e819f2a2e2aa2d2b8166fe49 |
+|                  | f116d852b5522de                                     |
 | FILES INSIDE     | 16 (bomb_0000.zip - bomb_0015.zip)                |
 | EACH INNER       | ~30.75 KiB (all identical)                         |
 | TOTAL FILES      | 1,606,938,044,258,990,275,541,962,092,341,      |
 |                  | 162,602,522,202,993,782,792,835,301,376           |
 | DIGITS           | 61                                                 |
 | OUTPUT SIZE      | 6.91 x 10^61 bytes                                |
-| RATIO            | 1 : 1.37 x 10^56                                  |
+| RATIO            | 1 : 1.36 x 10^56                                  |
 | BUILD TIME       | 0.36 seconds                                       |
 +------------------+----------------------------------------------------+
 ```
@@ -108,13 +110,13 @@ the trick: zip size grows ~8KB per level (linear). output multiplies by 16 per l
 Level  Zip Size     Output              Bar
 -----  -----------  ------------------  -------------------------------------------
    0   120.00 B     43 B                |
-   5    22.40 KB    43 MB               ###![image](file-service://file-E8xGJmU2d5XHv2h8hF6d7g)
+   5    22.40 KB    43 MB               ###
   10    58.35 KB    43 TB               #########
   15    96.68 KB    43 EB               ################
   20   136.51 KB    43 YB               ########################
   30   231.44 KB    4.62e13 YB          ##############################################
   40   336.19 KB    5.08e19 YB          ##############################################
-  50   493.60 KB    5.72e37 YB          ##############################################
+  50   497.00 KB    5.72e37 YB          ##############################################
 ```
 
 ---
@@ -127,7 +129,7 @@ ls -lh Terminus.zip
 
 # verify hash
 shasum -a 256 Terminus.zip
-# expected: 3ba1761a515b1a66f8322e5d4481d69d8a43bc9fa748e751d05327e9cd96dd96
+# expected: 5269c1b60f9497eb8a6bf9734e819f2a2e2aa2d2b8166fe49f116d852b5522de
 
 # list contents (safe - don't extract)
 zipinfo Terminus.zip
@@ -145,7 +147,7 @@ python3 terminus_sim.py
 python3 terminus_sim.py 16 50 43
 ```
 
-no files created. just math.
+no files created. just math. the simulator never extracts or generates the theoretical output -- it only calculates it.
 
 ---
 
@@ -179,6 +181,7 @@ with open("Terminus.zip", "wb") as f:
 Terminus.zip         the bomb
 terminus_sim.py      safe simulator
 README.md            this file
+SECURITY.md          safe usage guidelines
 docs/
   ARCHITECTURE.md    how the recursion works
   BENCHMARKS.md      performance data
