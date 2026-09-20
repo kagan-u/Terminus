@@ -1,3 +1,6 @@
 .DS_Store
 __pycache__/
 tests/__pycache__/
+terminus_charts/
+terminus_frames/
+*.mp4

@@ -148,6 +148,24 @@ python3 terminus_sim.py --config terminus_config.json
 python3 terminus_sim.py --compare
 ```
 
+### graphics
+
+```bash
+# generate charts (requires: pip install matplotlib numpy)
+python3 terminus_graph.py
+
+# output: terminus_charts/ directory with 7 PNG charts
+```
+
+### video
+
+```bash
+# generate video (requires: pip install matplotlib numpy imageio[ffmpeg])
+python3 terminus_video.py
+
+# output: terminus_explosion.mp4 (10s, 30fps, 1080p)
+```
+
 no files created. just math.
 
 ### verify
@@ -206,8 +224,11 @@ with open("Terminus.zip", "wb") as f:
 Terminus.zip              the bomb
 terminus_sim.py           safe simulator (v2)
 terminus_anim.py          terminal animation
+terminus_graph.py         matplotlib charts
+terminus_video.py         video generator
 README.md                 this file
 SECURITY.md               safe usage guidelines
+terminus_charts/          generated charts (from terminus_graph.py)
 tests/
   test_simulation.py      pytest tests
 docs/
