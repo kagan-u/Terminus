@@ -121,7 +121,36 @@ Level  Zip Size     Output              Bar
 
 ---
 
-## verify
+## quick start
+
+### simulation
+
+```bash
+# interactive mode
+python3 terminus_sim.py
+
+# cli mode
+python3 terminus_sim.py 16 50 43
+
+# with payload type
+python3 terminus_sim.py 16 50 43 text
+
+# animation
+python3 terminus_anim.py
+
+# create config file
+python3 terminus_sim.py --config
+
+# run with config
+python3 terminus_sim.py --config terminus_config.json
+
+# compare with known bombs
+python3 terminus_sim.py --compare
+```
+
+no files created. just math.
+
+### verify
 
 ```bash
 # check size
@@ -135,19 +164,15 @@ shasum -a 256 Terminus.zip
 zipinfo Terminus.zip
 ```
 
----
-
-## simulation
+### run tests
 
 ```bash
-# interactive mode
-python3 terminus_sim.py
+# install pytest
+pip install pytest
 
-# cli mode
-python3 terminus_sim.py 16 50 43
+# run tests
+pytest tests/ -v
 ```
-
-no files created. just math. the simulator never extracts or generates the theoretical output -- it only calculates it.
 
 ---
 
@@ -178,16 +203,35 @@ with open("Terminus.zip", "wb") as f:
 ## files
 
 ```
-Terminus.zip         the bomb
-terminus_sim.py      safe simulator
-README.md            this file
-SECURITY.md          safe usage guidelines
+Terminus.zip              the bomb
+terminus_sim.py           safe simulator (v2)
+terminus_anim.py          terminal animation
+README.md                 this file
+SECURITY.md               safe usage guidelines
+tests/
+  test_simulation.py      pytest tests
 docs/
-  ARCHITECTURE.md    how the recursion works
-  BENCHMARKS.md      performance data
-  TECHNICAL.md       algorithm deep dive
-  CHANGELOG.md       version history
+  ARCHITECTURE.md         how the recursion works
+  BENCHMARKS.md           performance data
+  TECHNICAL.md            algorithm deep dive
+  EXTRACTION.md           step-by-step extraction guide
+  COMPARISON.md           vs other zip bombs
+  CHANGELOG.md            version history
 ```
+
+---
+
+## docs
+
+| document | description |
+|----------|-------------|
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | how the recursion works |
+| [TECHNICAL.md](docs/TECHNICAL.md) | algorithm deep dive |
+| [EXTRACTION.md](docs/EXTRACTION.md) | step-by-step extraction guide |
+| [COMPARISON.md](docs/COMPARISON.md) | vs other zip bombs |
+| [BENCHMARKS.md](docs/BENCHMARKS.md) | performance data |
+| [CHANGELOG.md](docs/CHANGELOG.md) | version history |
+| [SECURITY.md](SECURITY.md) | safe usage guidelines |
 
 ---
 
