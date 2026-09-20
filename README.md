@@ -9,7 +9,7 @@
    ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝
 ```
 
-**RECURSIVE ZIP BOMB - LEVEL 50**
+**RECURSIVE ZIP BOMB**
 
 493 KB compressed -> 6.91 x 10^61 bytes output
 
