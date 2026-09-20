@@ -399,4 +399,4 @@ npm install
 
 ## license
 
-do whatever you want. don't blame me if you extract it.
+CC0 1.0 Universal
