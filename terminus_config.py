@@ -1,36 +1,28 @@
 #!/usr/bin/env python3
 """
-TERMINUS OPTIMIZER
-finds the optimal configuration for maximum output within zip size limits.
+TERMINUS CONFIG
+finds optimal configuration and compares versions.
 """
 
-import math
-
-
-def zip_overhead():
-    """minimum bytes per zip entry."""
-    return 116  # headers + footers
+VERSIONS = {
+    'mini':     {'branching': 4,    'level': 10,  'payload': 43},
+    'basic':    {'branching': 8,    'level': 20,  'payload': 43},
+    'standard': {'branching': 16,   'level': 50,  'payload': 43},
+    'deep':     {'branching': 16,   'level': 100, 'payload': 43},
+    'wide':     {'branching': 256,  'level': 50,  'payload': 1},
+    'mega':     {'branching': 256,  'level': 150, 'payload': 1},
+    'ultra':    {'branching': 256,  'level': 100, 'payload': 1},
+    'god':      {'branching': 65536,'level': 100, 'payload': 1},
+}
 
 
 def estimate_zip_size(branching, level, payload):
-    """estimate zip size - uses quadratic model from actual measurements."""
-    # quadratic model calibrated to actual terminus builds
-    # zip_size(level) = a*level^2 + b*level + c
-    # for branching=16, payload=43: 508950 bytes at level 50
-    # adjust for different branching/payload
-    a = 68.5
-    b = 5850.0
-    c = 120.0
-
+    """quadratic model calibrated to actual builds."""
+    a, b, c = 68.5, 5850.0, 120.0
     base = a * level**2 + b * level + c
-
-    # scale by payload ratio (larger payload = slightly larger zip)
     base *= (1 + (payload - 43) * 0.001)
-
-    # scale by branching (more entries per level = more overhead)
     branching_factor = 1 + (branching - 16) * 0.02
     base *= branching_factor
-
     return int(base)
 
 
@@ -57,36 +49,27 @@ def find_optimal(max_zip_kb=500, max_level=200):
                         'zip_size': zs,
                         'total_files': tf,
                         'total_bytes': tb,
-                        'ratio': tb / zs,
                     }
     return best
 
 
 def compare():
     """print comparison table."""
-    print("\n  TERMINUS CONFIG COMPARISON")
+    print("\n  TERMINUS COMPARISON")
     print("  " + "=" * 75)
-    print(f"  {'Config':<25} {'Zip':>10} {'Files':>12} {'Output':>15} {'Ratio':>15}")
+    print(f"  {'Version':<12} {'Branch':>8} {'Level':>6} {'Zip':>10} {'Files':>12} {'Output':>12}")
     print("  " + "-" * 75)
 
-    configs = [
-        ("Terminus (16^50, 43B)", 16, 50, 43),
-        ("Deep (16^100, 43B)", 16, 100, 43),
-        ("Wide (256^50, 1B)", 256, 50, 1),
-        ("Extreme (256^100, 1B)", 256, 100, 1),
-        ("Mega (256^150, 1B)", 256, 150, 1),
-        ("Ultra (65536^100, 1B)", 65536, 100, 1),
-    ]
-
-    for name, br, lv, pl in configs:
+    for name, cfg in VERSIONS.items():
+        br = cfg['branching']
+        lv = cfg['level']
+        pl = cfg['payload']
         zs = estimate_zip_size(br, lv, pl)
         tf = br ** lv
         tb = tf * pl
-        zip_kb = zs // 1024
-        # ratio as string to avoid overflow
         digits_tf = len(str(tf))
         digits_tb = len(str(tb))
-        print(f"  {name:<25} {zip_kb:>10}KB 10^{digits_tf-1:<3} files 10^{digits_tb-1:<3} bytes")
+        print(f"  {name:<12} {br:>8} {lv:>6} {zs//1024:>8}KB  10^{digits_tf-1:<3}    10^{digits_tb-1:<3}")
 
     print("  " + "=" * 75)
 
@@ -97,10 +80,9 @@ def compare():
         print(f"  branching:   {best['branching']}")
         print(f"  level:       {best['level']}")
         print(f"  payload:     {best['payload']}B")
-        print(f"  zip size:    {best['zip_size']/1024:.1f}KB")
+        print(f"  zip size:    {best['zip_size']//1024}KB")
         print(f"  total files: {best['total_files']:.4e}")
         print(f"  output:      {best['total_bytes']:.4e} bytes")
-        print(f"  ratio:       1:{best['ratio']:.4e}")
     print("  " + "=" * 75)
 
 

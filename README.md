@@ -155,10 +155,13 @@ python3 terminus_sim.py --config terminus_config.json
 python3 terminus_sim.py --compare
 
 # find optimal config
-python3 terminus_optimizer.py
+python3 terminus_config.py
 
-# build extreme version (256^100)
-python3 terminus_extreme.py
+# build ultra version (256^100)
+python3 terminus_ultra.py ultra
+
+# list all versions
+python3 terminus_ultra.py --list
 ```
 
 ### graphics
@@ -295,8 +298,8 @@ Terminus/
 ├── terminus_anim.py             terminal animation
 ├── terminus_graph.py            matplotlib charts
 ├── terminus_video.py            video generator
-├── terminus_extreme.py          extreme version builder
-├── terminus_optimizer.py        config optimizer
+├── terminus_ultra.py            ultra version builder
+├── terminus_config.py           version config & optimizer
 ├── terminus_explosion.mp4       generated video (10s, 1080p)
 ├── terminus_charts/             generated charts (7 PNGs)
 ├── README.md                    this file
