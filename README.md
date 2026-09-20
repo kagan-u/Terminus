@@ -141,7 +141,7 @@ Level  Zip Size     Output              Bar
 
 ### video
 
-![Terminus Explosion](terminus_explosion.mp4)
+![Terminus Explosion](https://streamable.com/c6p79o)
 
 ---
 
