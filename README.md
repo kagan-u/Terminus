@@ -104,23 +104,6 @@ the trick: zip size grows ~8KB per level (linear). output multiplies by 16 per l
 
 ---
 
-## growth chart
-
-```
-Level  Zip Size     Output              Bar
------  -----------  ------------------  -------------------------------------------
-   0   120.00 B     43 B                |
-   5    22.40 KB    43 MB               ###
-  10    58.35 KB    43 TB               #########
-  15    96.68 KB    43 EB               ################
-  20   136.51 KB    43 YB               ########################
-  30   231.44 KB    4.62e13 YB          ##############################################
-  40   336.19 KB    5.08e19 YB          ##############################################
-  50   497.00 KB    5.72e37 YB          ##############################################
-```
-
----
-
 ## visuals
 
 ### charts
@@ -190,6 +173,60 @@ python3 terminus_video.py
 # output: terminus_explosion.mp4 (10s, 30fps, 1080p)
 ```
 
+### interactive charts (plotly)
+
+```bash
+# generate interactive HTML charts
+python3 src/web/plotly_charts.py
+
+# output: terminus_interactive/terminus_interactive.html
+```
+
+### terminal UI (rich)
+
+```bash
+# run rich terminal UI
+python3 src/cli/rich_ui.py
+```
+
+### web app (flask)
+
+```bash
+# run flask web app
+python3 web/flask/app.py
+
+# open http://localhost:5000
+```
+
+### API (fastapi)
+
+```bash
+# run fastapi server
+uvicorn web.fastapi.app:app --reload
+
+# open http://localhost:8000/docs
+```
+
+### JavaScript
+
+```bash
+# run demo
+node examples/demo.js
+
+# run tests
+node tests/test.js
+```
+
+### Docker
+
+```bash
+# build image
+docker build -t terminus .
+
+# run container
+docker run -p 5000:5000 terminus
+```
+
 no files created. just math.
 
 ### verify
@@ -212,8 +249,11 @@ zipinfo Terminus.zip
 # install pytest
 pip install pytest
 
-# run tests
+# run python tests
 pytest tests/ -v
+
+# run javascript tests
+node tests/test.js
 ```
 
 ---
@@ -242,27 +282,60 @@ with open("Terminus.zip", "wb") as f:
 
 ---
 
-## files
+## project structure
 
 ```
-Terminus.zip              the bomb
-terminus_sim.py           safe simulator (v2)
-terminus_anim.py          terminal animation
-terminus_graph.py         matplotlib charts
-terminus_video.py         video generator
-terminus_explosion.mp4    generated video (10s, 1080p)
-terminus_charts/          generated charts (7 PNGs)
-README.md                 this file
-SECURITY.md               safe usage guidelines
-tests/
-  test_simulation.py      pytest tests
-docs/
-  ARCHITECTURE.md         how the recursion works
-  BENCHMARKS.md           performance data
-  TECHNICAL.md            algorithm deep dive
-  EXTRACTION.md           step-by-step extraction guide
-  COMPARISON.md           vs other zip bombs
-  CHANGELOG.md            version history
+Terminus/
+├── Terminus.zip                 the bomb
+├── terminus_sim.py              safe simulator (v2)
+├── terminus_anim.py             terminal animation
+├── terminus_graph.py            matplotlib charts
+├── terminus_video.py            video generator
+├── terminus_explosion.mp4       generated video (10s, 1080p)
+├── terminus_charts/             generated charts (7 PNGs)
+├── README.md                    this file
+├── SECURITY.md                  safe usage guidelines
+├── requirements.txt             python dependencies
+├── pyproject.toml               pypi config
+├── package.json                 npm config
+├── Dockerfile                   docker setup
+├── js/
+│   └── terminus.js              javascript port
+├── src/
+│   ├── core/
+│   │   └── __init__.py          core simulation engine
+│   ├── cli/
+│   │   ├── main.py              cli entry point
+│   │   └── rich_ui.py           rich terminal ui
+│   ├── api/
+│   │   └── __init__.py
+│   └── web/
+│       └── plotly_charts.py     plotly interactive charts
+├── web/
+│   ├── flask/
+│   │   └── app.py               flask web app
+│   ├── fastapi/
+│   │   └── app.py               fastapi backend
+│   ├── static/
+│   │   ├── css/style.css        web app styles
+│   │   └── js/app.js            web app logic
+│   └── templates/
+│       └── index.html           web app template
+├── tests/
+│   ├── test_simulation.py       pytest tests
+│   └── test.js                  javascript tests
+├── examples/
+│   └── demo.js                  javascript demo
+├── docs/
+│   ├── ARCHITECTURE.md          how the recursion works
+│   ├── BENCHMARKS.md            performance data
+│   ├── TECHNICAL.md             algorithm deep dive
+│   ├── EXTRACTION.md            step-by-step extraction guide
+│   ├── COMPARISON.md            vs other zip bombs
+│   └── CHANGELOG.md             version history
+└── .github/
+    └── workflows/
+        └── ci.yml               github actions
 ```
 
 ---
@@ -278,6 +351,22 @@ docs/
 | [BENCHMARKS.md](docs/BENCHMARKS.md) | performance data |
 | [CHANGELOG.md](docs/CHANGELOG.md) | version history |
 | [SECURITY.md](SECURITY.md) | safe usage guidelines |
+
+---
+
+## install
+
+### python
+
+```bash
+pip install -e .
+```
+
+### npm
+
+```bash
+npm install
+```
 
 ---
 

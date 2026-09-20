@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "terminus-zipbomb"
+version = "1.0.0"
+description = "Recursive zip bomb simulator and analysis tool"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [
+    { name = "kagan-u" }
+]
+keywords = ["zip", "bomb", "compression", "recursion", "simulation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://github.com/kagan-u/Terminus"
+Repository = "https://github.com/kagan-u/Terminus"
+Issues = "https://github.com/kagan-u/Terminus/issues"
+
+[project.scripts]
+terminus = "src.cli.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]

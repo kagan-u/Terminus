@@ -1,3 +1,9 @@
 .DS_Store
 __pycache__/
 tests/__pycache__/
+*.pyc
+node_modules/
+.env
+*.egg-info/
+dist/
+build/

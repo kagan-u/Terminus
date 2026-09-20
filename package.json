@@ -1,0 +1,23 @@
+{
+  "name": "terminus-sim",
+  "version": "1.0.0",
+  "description": "Recursive zip bomb simulator - JavaScript port",
+  "main": "js/terminus.js",
+  "scripts": {
+    "test": "node tests/test.js",
+    "demo": "node examples/demo.js"
+  },
+  "keywords": [
+    "zip",
+    "bomb",
+    "compression",
+    "recursion",
+    "simulation"
+  ],
+  "author": "kagan-u",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kagan-u/Terminus"
+  }
+}
