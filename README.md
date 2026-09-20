@@ -121,6 +121,30 @@ Level  Zip Size     Output              Bar
 
 ---
 
+## visuals
+
+### charts
+
+![Zip Size Growth](terminus_charts/01_zip_size_growth.png)
+
+![File Count Explosion](terminus_charts/02_file_count_explosion.png)
+
+![Compression Ratio](terminus_charts/03_compression_ratio.png)
+
+![Zip vs Output](terminus_charts/04_zip_vs_output.png)
+
+![Bombs Comparison](terminus_charts/05_bombs_comparison.png)
+
+![Scale Comparison](terminus_charts/06_scale_comparison.png)
+
+![Growth Breakdown](terminus_charts/07_growth_breakdown.png)
+
+### video
+
+![Terminus Explosion](terminus_explosion.mp4)
+
+---
+
 ## quick start
 
 ### simulation
@@ -226,9 +250,10 @@ terminus_sim.py           safe simulator (v2)
 terminus_anim.py          terminal animation
 terminus_graph.py         matplotlib charts
 terminus_video.py         video generator
+terminus_explosion.mp4    generated video (10s, 1080p)
+terminus_charts/          generated charts (7 PNGs)
 README.md                 this file
 SECURITY.md               safe usage guidelines
-terminus_charts/          generated charts (from terminus_graph.py)
 tests/
   test_simulation.py      pytest tests
 docs/
