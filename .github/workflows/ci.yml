@@ -55,11 +55,34 @@ jobs:
       run: |
         python terminus_graph.py
     
+    - name: Copy charts to site
+      run: |
+        cp -r terminus_charts/* site/img/
+    
     - name: Upload charts
       uses: actions/upload-artifact@v4
       with:
         name: charts
         path: terminus_charts/
+
+  deploy-netlify:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy to Netlify
+      uses: nwtgck/actions-netlify@v3
+      with:
+        publish-dir: './site'
+        production-deploy: true
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        deploy-message: "Deploy from GitHub Actions"
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
   docker:
     needs: test

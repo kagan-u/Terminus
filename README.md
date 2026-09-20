@@ -282,6 +282,33 @@ with open("Terminus.zip", "wb") as f:
 
 ---
 
+## deployment
+
+### GitHub Pages
+
+1. Go to repo Settings > Pages
+2. Source: Deploy from a branch
+3. Branch: main, folder: /site
+4. Save
+
+### Netlify
+
+1. Connect repo to Netlify
+2. Build command: (leave empty)
+3. Publish directory: site
+4. Deploy
+
+### Manual
+
+```bash
+# copy site files
+cp -r terminus_charts/* site/img/
+
+# deploy site/ folder to any static host
+```
+
+---
+
 ## project structure
 
 ```
