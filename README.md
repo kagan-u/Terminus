@@ -153,6 +153,12 @@ python3 terminus_sim.py --config terminus_config.json
 
 # compare with known bombs
 python3 terminus_sim.py --compare
+
+# find optimal config
+python3 terminus_optimizer.py
+
+# build extreme version (256^100)
+python3 terminus_extreme.py
 ```
 
 ### graphics
@@ -289,6 +295,8 @@ Terminus/
 ├── terminus_anim.py             terminal animation
 ├── terminus_graph.py            matplotlib charts
 ├── terminus_video.py            video generator
+├── terminus_extreme.py          extreme version builder
+├── terminus_optimizer.py        config optimizer
 ├── terminus_explosion.mp4       generated video (10s, 1080p)
 ├── terminus_charts/             generated charts (7 PNGs)
 ├── README.md                    this file
@@ -301,7 +309,8 @@ Terminus/
 │   └── terminus.js              javascript port
 ├── src/
 │   ├── core/
-│   │   └── __init__.py          core simulation engine
+│   │   ├── __init__.py          core simulation engine
+│   │   └── optimizer.py         config optimizer
 │   ├── cli/
 │   │   ├── main.py              cli entry point
 │   │   └── rich_ui.py           rich terminal ui
