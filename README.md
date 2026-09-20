@@ -189,24 +189,6 @@ python3 src/web/plotly_charts.py
 python3 src/cli/rich_ui.py
 ```
 
-### web app (flask)
-
-```bash
-# run flask web app
-python3 web/flask/app.py
-
-# open http://localhost:5000
-```
-
-### API (fastapi)
-
-```bash
-# run fastapi server
-uvicorn web.fastapi.app:app --reload
-
-# open http://localhost:8000/docs
-```
-
 ### JavaScript
 
 ```bash
@@ -284,26 +266,15 @@ with open("Terminus.zip", "wb") as f:
 
 ## deployment
 
-### GitHub Pages
+### GitHub Pages (automatic)
 
-1. Go to repo Settings > Pages
-2. Source: Deploy from a branch
-3. Branch: main, folder: /site
-4. Save
+already configured. every push to main deploys automatically.
 
-### Netlify
-
-1. Connect repo to Netlify
-2. Build command: (leave empty)
-3. Publish directory: site
-4. Deploy
+site: https://kagan-u.github.io/Terminus
 
 ### Manual
 
 ```bash
-# copy site files
-cp -r terminus_charts/* site/img/
-
 # deploy site/ folder to any static host
 ```
 
@@ -338,16 +309,12 @@ Terminus/
 │   │   └── __init__.py
 │   └── web/
 │       └── plotly_charts.py     plotly interactive charts
-├── web/
-│   ├── flask/
-│   │   └── app.py               flask web app
-│   ├── fastapi/
-│   │   └── app.py               fastapi backend
-│   ├── static/
-│   │   ├── css/style.css        web app styles
-│   │   └── js/app.js            web app logic
-│   └── templates/
-│       └── index.html           web app template
+├── site/
+│   ├── index.html               static site (GitHub Pages)
+│   ├── css/style.css            site styles
+│   └── js/
+│       ├── terminus.js          javascript port
+│       └── app.js               site logic
 ├── tests/
 │   ├── test_simulation.py       pytest tests
 │   └── test.js                  javascript tests
