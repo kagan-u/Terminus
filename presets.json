@@ -1,0 +1,60 @@
+{
+  "presets": {
+    "mini": {
+      "branching": 4,
+      "level": 10,
+      "payload": 43,
+      "payload_type": "zeros",
+      "description": "tiny proof of concept"
+    },
+    "basic": {
+      "branching": 8,
+      "level": 20,
+      "payload": 43,
+      "payload_type": "zeros",
+      "description": "small demonstration"
+    },
+    "standard": {
+      "branching": 16,
+      "level": 50,
+      "payload": 43,
+      "payload_type": "zeros",
+      "description": "the original Terminus.zip"
+    },
+    "deep": {
+      "branching": 16,
+      "level": 100,
+      "payload": 43,
+      "payload_type": "zeros",
+      "description": "deep nesting, same branching"
+    },
+    "wide": {
+      "branching": 256,
+      "level": 50,
+      "payload": 1,
+      "payload_type": "zeros",
+      "description": "wide branching, minimal payload"
+    },
+    "mega": {
+      "branching": 256,
+      "level": 150,
+      "payload": 1,
+      "payload_type": "zeros",
+      "description": "mega scale, 10^361 files"
+    },
+    "ultra": {
+      "branching": 256,
+      "level": 100,
+      "payload": 1,
+      "payload_type": "zeros",
+      "description": "Terminus Ultra, 10^240 files"
+    },
+    "god": {
+      "branching": 65536,
+      "level": 100,
+      "payload": 1,
+      "payload_type": "zeros",
+      "description": "theoretical maximum, 10^481 files"
+    }
+  }
+}

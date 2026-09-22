@@ -59,6 +59,29 @@ built on the 42.zip algorithm. level 50, branching factor 16, 43-byte payload.
 +------------------+----------------------------------------------------+
 ```
 
+verify integrity:
+
+```bash
+python3 terminus_hash.py
+# or
+shasum -a 256 Terminus.zip
+```
+
+---
+
+## versions
+
+| name | branch | level | payload | files | output |
+|------|--------|-------|---------|-------|--------|
+| mini | 4 | 10 | 43B | 10^6 | 10^7 |
+| basic | 8 | 20 | 43B | 10^18 | 10^19 |
+| **standard** | 16 | 50 | 43B | 10^60 | 10^61 |
+| deep | 16 | 100 | 43B | 10^120 | 10^122 |
+| wide | 256 | 50 | 1B | 10^120 | 10^120 |
+| **ultra** | 256 | 100 | 1B | 10^240 | 10^240 |
+| mega | 256 | 150 | 1B | 10^361 | 10^361 |
+| god | 65536 | 100 | 1B | 10^481 | 10^481 |
+
 ---
 
 ## comparisons
@@ -130,6 +153,24 @@ the trick: zip size grows ~8KB per level (linear). output multiplies by 16 per l
 
 ## quick start
 
+### make commands
+
+```bash
+make help        # list all commands
+make sim         # interactive simulator
+make build       # live build simulation
+make tui         # interactive terminal UI
+make anim        # terminal animation
+make benchmark   # performance benchmarks
+make config      # compare all versions
+make ultra       # list ultra versions
+make hash        # verify integrity
+make chart       # generate charts
+make video       # generate video
+make test        # run python tests
+make testjs      # run javascript tests
+```
+
 ### simulation
 
 ```bash
@@ -148,13 +189,14 @@ python3 terminus_anim.py
 # create config file
 python3 terminus_sim.py --config
 
-# run with config
-python3 terminus_sim.py --config terminus_config.json
-
 # compare with known bombs
 python3 terminus_sim.py --compare
+```
 
-# find optimal config
+### versions & optimizer
+
+```bash
+# compare all versions
 python3 terminus_config.py
 
 # build ultra version (256^100)
@@ -164,38 +206,54 @@ python3 terminus_ultra.py ultra
 python3 terminus_ultra.py --list
 ```
 
+### live build
+
+```bash
+# simulated build (fast)
+python3 terminus_build.py 16 50 43
+
+# real build (actually creates levels)
+python3 terminus_build.py 16 20 43 --real
+```
+
+### interactive tools
+
+```bash
+# curses terminal UI
+python3 terminus_tui.py
+
+# rich terminal UI
+python3 src/cli/rich_ui.py
+```
+
+### benchmarks
+
+```bash
+# build/read/compression benchmarks
+python3 terminus_benchmark.py
+```
+
+### integrity
+
+```bash
+# verify Terminus.zip
+python3 terminus_hash.py
+
+# generate MANIFEST.json
+python3 terminus_hash.py --manifest
+```
+
 ### graphics
 
 ```bash
 # generate charts (requires: pip install matplotlib numpy)
 python3 terminus_graph.py
 
-# output: terminus_charts/ directory with 7 PNG charts
-```
-
-### video
-
-```bash
 # generate video (requires: pip install matplotlib numpy imageio[ffmpeg])
 python3 terminus_video.py
 
-# output: terminus_explosion.mp4 (10s, 30fps, 1080p)
-```
-
-### interactive charts (plotly)
-
-```bash
-# generate interactive HTML charts
+# interactive plotly charts
 python3 src/web/plotly_charts.py
-
-# output: terminus_interactive/terminus_interactive.html
-```
-
-### terminal UI (rich)
-
-```bash
-# run rich terminal UI
-python3 src/cli/rich_ui.py
 ```
 
 ### JavaScript
@@ -211,41 +269,19 @@ node tests/test.js
 ### Docker
 
 ```bash
-# build image
 docker build -t terminus .
-
-# run container
-docker run -p 5000:5000 terminus
+docker run --rm terminus python terminus_sim.py 16 10 43
 ```
 
-no files created. just math.
-
-### verify
+### verify manually
 
 ```bash
-# check size
 ls -lh Terminus.zip
-
-# verify hash
 shasum -a 256 Terminus.zip
-# expected: 5269c1b60f9497eb8a6bf9734e819f2a2e2aa2d2b8166fe49f116d852b5522de
-
-# list contents (safe - don't extract)
 zipinfo Terminus.zip
 ```
 
-### run tests
-
-```bash
-# install pytest
-pip install pytest
-
-# run python tests
-pytest tests/ -v
-
-# run javascript tests
-node tests/test.js
-```
+no files created by simulation. just math.
 
 ---
 
@@ -273,75 +309,59 @@ with open("Terminus.zip", "wb") as f:
 
 ---
 
-## deployment
-
-### GitHub Pages (automatic)
-
-already configured. every push to main deploys automatically.
-
-site: https://kagan-u.github.io/Terminus
-
-### Manual
-
-```bash
-# deploy site/ folder to any static host
-```
-
----
-
 ## project structure
 
 ```
 Terminus/
 ├── Terminus.zip                 the bomb
-├── terminus_sim.py              safe simulator (v2)
+├── Makefile                     command entry point
+├── presets.json                 version presets
+│
+├── terminus_sim.py              safe simulator
 ├── terminus_anim.py             terminal animation
+├── terminus_build.py            live build simulation
+├── terminus_tui.py              curses interactive TUI
+├── terminus_benchmark.py        performance benchmarks
+├── terminus_hash.py             integrity verification
+├── terminus_banner.py           ASCII banner generator
 ├── terminus_graph.py            matplotlib charts
 ├── terminus_video.py            video generator
-├── terminus_ultra.py            ultra version builder
+├── terminus_ultra.py            version builder
 ├── terminus_config.py           version config & optimizer
-├── terminus_explosion.mp4       generated video (10s, 1080p)
-├── terminus_charts/             generated charts (7 PNGs)
-├── README.md                    this file
-├── SECURITY.md                  safe usage guidelines
-├── requirements.txt             python dependencies
-├── pyproject.toml               pypi config
-├── package.json                 npm config
-├── Dockerfile                   docker setup
-├── js/
-│   └── terminus.js              javascript port
+│
 ├── src/
 │   ├── core/
-│   │   ├── __init__.py          core simulation engine
+│   │   ├── __init__.py          simulation engine
 │   │   └── optimizer.py         config optimizer
 │   ├── cli/
 │   │   ├── main.py              cli entry point
 │   │   └── rich_ui.py           rich terminal ui
-│   ├── api/
-│   │   └── __init__.py
 │   └── web/
-│       └── plotly_charts.py     plotly interactive charts
-├── site/
-│   ├── index.html               static site (GitHub Pages)
-│   ├── css/style.css            site styles
-│   └── js/
-│       ├── terminus.js          javascript port
-│       └── app.js               site logic
-├── tests/
-│   ├── test_simulation.py       pytest tests
-│   └── test.js                  javascript tests
+│       └── plotly_charts.py     plotly charts
+├── js/
+│   └── terminus.js              javascript port
 ├── examples/
 │   └── demo.js                  javascript demo
+├── tests/
+│   ├── test_simulation.py       python tests
+│   └── test.js                  javascript tests
 ├── docs/
 │   ├── ARCHITECTURE.md          how the recursion works
-│   ├── BENCHMARKS.md            performance data
 │   ├── TECHNICAL.md             algorithm deep dive
-│   ├── EXTRACTION.md            step-by-step extraction guide
+│   ├── EXTRACTION.md            extraction guide
 │   ├── COMPARISON.md            vs other zip bombs
+│   ├── BENCHMARKS.md            performance data
 │   └── CHANGELOG.md             version history
-└── .github/
-    └── workflows/
-        └── ci.yml               github actions
+├── .github/workflows/ci.yml     github actions
+├── README.md
+├── CONTRIBUTING.md
+├── ROADMAP.md
+├── SECURITY.md
+├── LICENSE                      CC0 1.0
+├── Dockerfile
+├── requirements.txt
+├── pyproject.toml
+└── package.json
 ```
 
 ---
@@ -357,20 +377,15 @@ Terminus/
 | [BENCHMARKS.md](docs/BENCHMARKS.md) | performance data |
 | [CHANGELOG.md](docs/CHANGELOG.md) | version history |
 | [SECURITY.md](SECURITY.md) | safe usage guidelines |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | how to contribute |
+| [ROADMAP.md](ROADMAP.md) | planned features |
 
 ---
 
 ## install
 
-### python
-
 ```bash
 pip install -e .
-```
-
-### npm
-
-```bash
 npm install
 ```
 
